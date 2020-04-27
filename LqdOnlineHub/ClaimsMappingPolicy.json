@@ -1,0 +1,18 @@
+{
+  "ClaimsMappingPolicy": {
+    "Version": 1,
+    "IncludeBasicClaimSet": true,
+    "ClaimsSchema": [
+      {
+        "Source": "user",
+        "ID": "department",
+        "JwtClaimType": "department"
+      },
+      {
+        "Source": "user",
+        "ID": "jobtitle",
+        "JwtClaimType": "jobTitle"
+      }
+    ]
+  }
+}

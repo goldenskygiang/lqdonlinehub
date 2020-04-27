@@ -1,0 +1,98 @@
+﻿@model MemberIndexViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<h1>Danh sách đoàn viên</h1>
+<form asp-action="Index" method="get">
+    <div class="form-row align-items-end">
+        <div class="form-group col-md-2">
+            <label class="control-label">Lớp</label>
+            <select class="form-control"
+                    name="grade"
+                    asp-for="@Model.SelectedGrade"
+                    asp-items="@Html.GetEnumSelectList<Grade>()"></select>
+        </div>
+        <div class="form-group col-md-2">
+            <label class="control-label">Khối chuyên</label>
+            <select class="form-control"
+                    name="className"
+                    asp-for="@Model.SelectedClass"
+                    asp-items="@Html.GetEnumSelectList<Class>()"></select>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Tìm kiếm" class="btn btn-primary" />
+        </div>
+        @if (Model.Downloadable)
+        {
+            <div class="form-group" style="margin-left: 1em;">
+                <button asp-action="ExportList" id="btnDownload" class="btn btn-success">
+                    <span class="fas fa-file-excel"></span> Tải danh sách
+                </button>
+            </div>
+        }
+    </div>
+</form>
+@if (Model.Members != null && Model.Members.Count() > 0)
+{
+    UserProfile model = null;
+
+    <p>Tổng số: <strong>@Model.Members.Count()</strong> đoàn viên</p>
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(m => model.FullName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => model.Gender)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => model.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => model.PhoneNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => model.LastEdit)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Members)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Gender)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
+                        </td>
+                        <td class="timeago" datetime="@item.LastEdit.ToString("o")">
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else if (Model != null)
+{
+    <p>@Model.EmptyMessage</p>
+}
+
+@section Scripts
+{
+    <script>
+    $(() => {
+        timeago.render(document.querySelectorAll('.timeago'), 'vi');
+    });
+    </script>
+}
